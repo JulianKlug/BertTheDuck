@@ -12,6 +12,7 @@ from pytorch_pretrained_bert_2.tokenization import BertTokenizer
 from fastprogress import master_bar, progress_bar
 import random
 from feature_utils import convert_sentence_pair
+from data_processing_utils import select_text_idx
 
 # constants
 SEED = 42
@@ -52,9 +53,11 @@ class BERT_Recommender():
         # correct_pairs = convert_sentence_pair(df_full.title.tolist(), df_full.desc.tolist(), max_seq_length=200,
         #                                       tokenizer=self.tokenizer)
 
+        
+        
     def get_recommendations(self, df_full):
         ## Prediction SEED
-        idx = 102
+        df_full, idx = select_text_idx(df_full)
         print('INPUT', df_full.iloc[idx].title, df_full.iloc[idx].desc)
 
         sentence_pairs = convert_sentence_pair(
