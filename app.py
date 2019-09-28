@@ -2,12 +2,15 @@ import json, os, time
 from flask import Flask, abort, jsonify, make_response
 from BERT_Recommender import BERT_Recommender
 from data_processing_utils import preprocess_input, translate_company_codes
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+
 
 input_file = '/Users/julian/hackzurich/trial1/isocial.json'
 output_dir = '/Users/julian/hackzurich/banking_web_app/public/recommendations'
 
 app = Flask(__name__)
 
+analyser = SentimentIntensityAnalyzer()
 recommandation_system = BERT_Recommender()
 
 @app.route('/get_recommendations')
@@ -30,6 +33,11 @@ def get_recommendations():
         for _, row in df_full.iloc[best_matches].iterrows():
             article_list.append(row.to_dict())
         # %%
+        
+        for article in article_list.items():
+            sentiment = analyser.polarity_scores(article['desc'])['compound']
+            article['sentiment'] = sentiment
+
         with open(os.path.join(output_dir, 'recommendations.json'), 'w') as outfile:
             json.dump(article_list, outfile)
         # %%
