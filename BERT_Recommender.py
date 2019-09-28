@@ -17,6 +17,7 @@ from data_processing_utils import select_text_idx
 # constants
 SEED = 42
 PYTORCH_PRETRAINED_BERT_CACHE = "/Users/julian/hackzurich/temp"
+keyword = "facebook"
 
 # Local network environment settings
 os.environ["http_proxy"] = "127.0.0.1:11233"
@@ -57,14 +58,14 @@ class BERT_Recommender():
         
     def get_recommendations(self, df_full):
         ## Prediction SEED
-        df_full, idx = select_text_idx(df_full)
+        df_full, idx = select_text_idx(keyword, df_full)
         print('INPUT', df_full.iloc[idx].title, df_full.iloc[idx].desc)
 
         sentence_pairs = convert_sentence_pair(
             [df_full.iloc[idx]["title"]] * df_full.shape[0],
             df_full.desc.tolist(), max_seq_length=200, tokenizer=self.tokenizer)
         # %%
-        BATCH_SIZE = 128
+        BATCH_SIZE = 36#128
         logger.info("***** Running evaluation *****")
         all_input_ids = torch.tensor([f.input_ids for f in sentence_pairs], dtype=torch.long)
         all_input_mask = torch.tensor([f.input_mask for f in sentence_pairs], dtype=torch.long)

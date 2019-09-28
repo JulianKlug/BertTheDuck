@@ -6,7 +6,7 @@ def preprocess_input(input_file):
     with open(input_file) as fin:
         dat = json.load(fin)
 
-    number_of_input_articles = 128
+    number_of_input_articles = 36#128
     entries = []
     for i in dat['hits']['hits']:
         src = i['_source']
@@ -87,10 +87,10 @@ def translate_company_codes(dataframe):
             sorted_by_match['Regions'][news_counter] = string
     return sorted_by_match
 
-def select_text_idx(df_full):
+def select_text_idx(keyword ,df_full):
     df_full['wordcount'] = df_full['desc'].apply(lambda x: len(x.split()))
     df_full = df_full.sort_values(by=['wordcount'], ascending=False)
     for i, title in enumerate(df_full['title']):
-        if 'facebook' in title.lower():
+        if keyword in title.lower():
             break
     return(df_full, i)
