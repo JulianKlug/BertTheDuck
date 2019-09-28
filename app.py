@@ -1,26 +1,30 @@
 import json, os, time
 from flask import Flask, abort, jsonify, make_response
 from BERT_Recommender import BERT_Recommender
-from data_processing_utils import preprocess_input
-
+from data_processing_utils import preprocess_input, translate_company_codes
 
 input_file = '/Users/julian/hackzurich/trial1/isocial.json'
 output_dir = '/Users/julian/hackzurich/banking_web_app/public/recommendations'
 
 app = Flask(__name__)
 
+recommandation_system = BERT_Recommender()
+
 @app.route('/get_recommendations')
 def get_recommendations():
     try:
         df_full = preprocess_input(input_file)
-        recommandation_system = BERT_Recommender()
-
         start = time.time()
         all_sorted_matches = recommandation_system.get_recommendations(df_full)
-        best_matches = all_sorted_matches[:10]
-        print('OUT', best_matches)
         end = time.time()
         print('Prediction time:', end - start)
+
+        # Postprocessing
+        df_full = translate_company_codes(df_full)
+
+        #  Saving Data
+        best_matches = all_sorted_matches[:10]
+        print('OUT', best_matches)
 
         article_list = []
         for _, row in df_full.iloc[best_matches].iterrows():
@@ -35,7 +39,8 @@ def get_recommendations():
 
         data = {'message': 'Computed', 'code': 'SUCCESS'}
         return make_response(jsonify(data), 200)
-    except:
+    except Exception as i:
+        print(i)
         return abort(404)
 
 if __name__ == "__main__":
