@@ -65,7 +65,7 @@ class BERT_Recommender():
             [df_full.iloc[idx]["title"]] * df_full.shape[0],
             df_full.desc.tolist(), max_seq_length=200, tokenizer=self.tokenizer)
         # %%
-        BATCH_SIZE = 36#128
+        BATCH_SIZE = 128
         logger.info("***** Running evaluation *****")
         all_input_ids = torch.tensor([f.input_ids for f in sentence_pairs], dtype=torch.long)
         all_input_mask = torch.tensor([f.input_mask for f in sentence_pairs], dtype=torch.long)
