@@ -1,5 +1,6 @@
 import json
 import pandas as pd
+import numpy as np
 
 def preprocess_input(input_file):
     ## Data Preparation
@@ -75,7 +76,12 @@ def translate_company_codes(dataframe):
                 if i.isalnum():
                     try: string[counter] = company_code_map[i.upper()]
                     except: break
-            sorted_by_match['Companies'][news_counter] = string
+            count = []
+            for i in string:
+                count.append(sorted_by_match['desc'][0].lower().count(i.split()[0].lower()))
+            max_ind = np.where(count == np.amax(count))
+            sorted_by_match['Companies'][news_counter] = string[max_ind[0][0]]
+
 
         if not pd.isnull(sorted_by_match['region_codes'][news_counter]):
             string = sorted_by_match['region_codes'][news_counter].split(sep=',')
