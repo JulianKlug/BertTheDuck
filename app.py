@@ -8,6 +8,7 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 input_file = os.path.expanduser('~/hackzurich/trial1/isocial.json')
 output_dir = os.path.expanduser('~/hackzurich/asset_recommendations_app/public/recommendations')
 
+
 app = Flask(__name__)
 
 analyser = SentimentIntensityAnalyzer()
