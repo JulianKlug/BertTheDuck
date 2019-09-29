@@ -5,7 +5,7 @@ from data_processing_utils import preprocess_input, translate_company_codes
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 
-input_file = os.path.expanduser('~/hackzurich/trial1/isocial.json')
+input_file = os.path.expanduser('./data/isocial.json')
 output_dir = os.path.expanduser('~/hackzurich/asset_recommendations_app/public/recommendations')
 
 
