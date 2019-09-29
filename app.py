@@ -16,10 +16,11 @@ recommandation_system = BERT_Recommender()
 
 @app.route('/get_recommendations')
 def get_recommendations():
+    seed_company = 'snapchat'
     try:
         df_full = preprocess_input(input_file)
         start = time.time()
-        all_sorted_matches, company_code = recommandation_system.get_recommendations(df_full, 'twitter')
+        all_sorted_matches, company_code = recommandation_system.get_recommendations(df_full, seed_company)
         end = time.time()
         print('Prediction time:', end - start)
 
@@ -49,7 +50,7 @@ def get_recommendations():
             sentiment = analyser.polarity_scores(article['desc'])['compound']
             article['sentiment'] = sentiment
 
-        with open(os.path.join(output_dir, 'recommendations.json'), 'w') as outfile:
+        with open(os.path.join(output_dir, 'recommendations_' + seed_company + '.json'), 'w') as outfile:
             json.dump(article_list, outfile)
         # %%
 
