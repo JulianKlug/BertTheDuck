@@ -19,7 +19,7 @@ def get_recommendations():
     try:
         df_full = preprocess_input(input_file)
         start = time.time()
-        all_sorted_matches = recommandation_system.get_recommendations(df_full)
+        all_sorted_matches = recommandation_system.get_recommendations(df_full, 'twitter')
         end = time.time()
         print('Prediction time:', end - start)
 

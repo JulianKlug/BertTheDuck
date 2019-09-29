@@ -87,10 +87,10 @@ def translate_company_codes(dataframe):
             sorted_by_match['Regions'][news_counter] = string
     return sorted_by_match
 
-def select_text_idx(df_full):
+def select_text_idx(df_full, company_name):
     df_full['wordcount'] = df_full['desc'].apply(lambda x: len(x.split()))
     df_full = df_full.sort_values(by=['wordcount'], ascending=False)
     for i, title in enumerate(df_full['title']):
-        if 'facebook' in title.lower():
+        if company_name.lower() in title.lower():
             break
     return(df_full, i)
