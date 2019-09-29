@@ -26,9 +26,9 @@ def get_recommendations():
         df_full = translate_company_codes(df_full)
 
         #  Saving Data
-        best_matches = all_sorted_matches[:20]
-#        best_matches['publication_date'] = list(map(int, best_matches['publication_date']))
-#        best_matches.sort_values(by=['publication_date'], ascending=False)
+        best_matches = all_sorted_matches[:10]
+#        best_matches['publication_date'].astype(int)
+#        best_matches = best_matches.sort_values(by=['publication_date'], ascending=False)
 #        best_matches = best_matches[:10]
         print('OUT', best_matches)
 

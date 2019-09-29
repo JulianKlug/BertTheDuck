@@ -7,7 +7,7 @@ def preprocess_input(input_file):
     with open(input_file) as fin:
         dat = json.load(fin)
 
-    number_of_input_articles = 5#128
+    number_of_input_articles = 128
     entries = []
     for i in dat['hits']['hits']:
         src = i['_source']
