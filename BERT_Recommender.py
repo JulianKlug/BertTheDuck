@@ -16,8 +16,9 @@ from data_processing_utils import select_text_idx
 
 # constants
 SEED = 42
-PYTORCH_PRETRAINED_BERT_CACHE = "/Users/julian/hackzurich/temp"
-keyword = "facebook"
+PYTORCH_PRETRAINED_BERT_CACHE = "./temp"
+if not os.path.exists(PYTORCH_PRETRAINED_BERT_CACHE):
+    os.mkdir(PYTORCH_PRETRAINED_BERT_CACHE)
 
 # Local network environment settings
 os.environ["http_proxy"] = "127.0.0.1:11233"
@@ -50,15 +51,11 @@ class BERT_Recommender():
             "bert-base-uncased",
             cache_dir=PYTORCH_PRETRAINED_BERT_CACHE
         ).to(self.device)
-
-        # correct_pairs = convert_sentence_pair(df_full.title.tolist(), df_full.desc.tolist(), max_seq_length=200,
-        #                                       tokenizer=self.tokenizer)
-
         
         
-    def get_recommendations(self, df_full):
+    def get_recommendations(self, df_full, seed_company_name):
         ## Prediction SEED
-        df_full, idx = select_text_idx(keyword, df_full)
+        df_full, idx = select_text_idx(df_full, seed_company_name)
         print('INPUT', df_full.iloc[idx].title, df_full.iloc[idx].desc)
 
         sentence_pairs = convert_sentence_pair(
@@ -75,7 +72,6 @@ class BERT_Recommender():
         eval_sampler = SequentialSampler(eval_data)
         eval_dataloader = DataLoader(eval_data, sampler=eval_sampler, batch_size=BATCH_SIZE)
 
-        # logger.info("  Num examples = %d", len(correct_pairs))
         logger.info("  Batch size = %d", BATCH_SIZE)
 
         self.model.eval()
