@@ -68,33 +68,51 @@ def translate_company_codes(dataframe):
     region_code_map = load_region_code_map()
     company_code_map = load_company_code_map()
 
-    for news_counter in range(len(sorted_by_match['company_codes'])):
-        if not pd.isnull(sorted_by_match['company_codes'][news_counter]):
-            string = sorted_by_match['company_codes'][news_counter].split(sep=',')
-            string = string[1:-1] #remove first and last element
-            for counter, i in enumerate(string):
-                if i.isalnum():
-                    try: string[counter] = company_code_map[i.upper()]
-                    except: break
-            print(string)
-            
-            count = []
-            for i in string:
+    company_translated = []
+    for i in dataframe['company_codes']:
+        codes = i.split(',')
+        if len(codes) > 1:
+            company_translated.append(company_code_map[codes[1].upper()])
+        else:
+            company_translated.append('')
+    sorted_by_match['Companies'] = company_translated
 
-                count.append(sorted_by_match['desc'][0].lower().count(i.split()[0].lower()))
-            break
-            max_ind = np.where(count == np.amax(count))
-            sorted_by_match['Companies'][news_counter] = string[max_ind[0][0]]
+    region_translated = []
+    for i in dataframe['region_codes']:
+        codes = i.split(',')
+        if len(codes) > 1:
+            region_translated.append(region_code_map[codes[1].upper()])
+        else:
+            region_translated.append('')
+    sorted_by_match['Regions'] = region_translated
 
-
-        if not pd.isnull(sorted_by_match['region_codes'][news_counter]):
-            string = sorted_by_match['region_codes'][news_counter].split(sep=',')
-            string = string[1:-1]
-            for counter, i in enumerate(string):
-                if i.isalnum():
-                    try: string[counter] = region_code_map[i.upper()]
-                    except: break
-            sorted_by_match['Regions'][news_counter] = string
+#    for news_counter in range(len(sorted_by_match['company_codes'])):
+#        if not pd.isnull(sorted_by_match['company_codes'][news_counter]):
+#            string = sorted_by_match['company_codes'][news_counter].split(sep=',')
+#            string = string[1:-1] #remove first and last element
+#            for counter, i in enumerate(string):
+#                if i.isalnum():
+#                    try: string[counter] = company_code_map[i.upper()]
+#                    except: break
+#            print(string)
+#
+#            count = []
+#            for i in string:
+#
+#                count.append(sorted_by_match['desc'][0].lower().count(i.split()[0].lower()))
+#            break
+#            max_ind = np.where(count == np.amax(count))
+#            sorted_by_match['Companies'][news_counter] = string[max_ind[0][0]]
+#
+#
+#        if not pd.isnull(sorted_by_match['region_codes'][news_counter]):
+#            string = sorted_by_match['region_codes'][news_counter].split(sep=',')
+#            string = string[1:-1]
+#            for counter, i in enumerate(string):
+#                if i.isalnum():
+#                    try: string[counter] = region_code_map[i.upper()]
+#                    except: break
+#            sorted_by_match['Regions'][news_counter] = string
     return sorted_by_match
 
 def select_text_idx(df_full, company_name):

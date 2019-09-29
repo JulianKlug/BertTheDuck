@@ -27,17 +27,21 @@ def get_recommendations():
         df_full = translate_company_codes(df_full)
 
         #  Saving Data
-        best_matches = all_sorted_matches[:30]
+        
+        
+        id_rm = [company_code in i for i in df_full['company_codes']]
+        best_matches = [i for i in all_sorted_matches if i not in id_rm]
+        best_matches = best_matches[:20]
         df_sub = df_full.iloc[best_matches,:]
-        id_keep = [company_code not in i for i in df_sub['company_codes']]
-        df_sub = df_sub.iloc[id_keep,:]
+        
         df_sub['publication_date'].astype(int)
         df_sub = df_sub.sort_values(by=['publication_date'], ascending=False)
-        df_sub = df_sub[:10]
-        print('OUT', best_matches)
+        df_sub = df_sub.iloc[:10,:]
+        
+        print('OUT', df_sub)
 
         article_list = []
-        for _, row in df_full.iloc[best_matches].iterrows():
+        for _, row in df_sub.iterrows():
             article_list.append(row.to_dict())
         # %%
         
@@ -49,8 +53,8 @@ def get_recommendations():
             json.dump(article_list, outfile)
         # %%
 
-        df_full.iloc[all_sorted_matches].to_csv(os.path.join(output_dir, 'sorted_by_match.csv'), index=False)
-        print(df_full.iloc[all_sorted_matches].head())
+        df_sub.to_csv(os.path.join(output_dir, 'sorted_by_match.csv'), index=False)
+        print(df_sub.head())
 
         data = {'message': 'Computed', 'code': 'SUCCESS'}
         return make_response(jsonify(data), 200)
