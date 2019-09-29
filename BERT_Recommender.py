@@ -56,6 +56,7 @@ class BERT_Recommender():
     def get_recommendations(self, df_full, seed_company_name):
         ## Prediction SEED
         df_full, idx = select_text_idx(df_full, seed_company_name)
+        company_code = df_full['company_codes'][idx]
         print('INPUT', df_full.iloc[idx].title, df_full.iloc[idx].desc)
 
         sentence_pairs = convert_sentence_pair(
@@ -94,7 +95,8 @@ class BERT_Recommender():
         # _ = plt.hist(res, bins=100)
         # %%
         all_sorted_matches = np.argsort(res)[::-1]
-        return all_sorted_matches
+        
+        return (all_sorted_matches, company_code)
 
 
 

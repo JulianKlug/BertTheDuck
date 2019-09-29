@@ -19,7 +19,7 @@ def get_recommendations():
     try:
         df_full = preprocess_input(input_file)
         start = time.time()
-        all_sorted_matches = recommandation_system.get_recommendations(df_full, 'twitter')
+        all_sorted_matches, company_code = recommandation_system.get_recommendations(df_full, 'twitter')
         end = time.time()
         print('Prediction time:', end - start)
 
@@ -27,10 +27,13 @@ def get_recommendations():
         df_full = translate_company_codes(df_full)
 
         #  Saving Data
-        best_matches = all_sorted_matches[:10]
-#        best_matches['publication_date'].astype(int)
-#        best_matches = best_matches.sort_values(by=['publication_date'], ascending=False)
-#        best_matches = best_matches[:10]
+        best_matches = all_sorted_matches[:30]
+        df_sub = df_full.iloc[best_matches,:]
+        id_keep = [company_code not in i for i in df_sub['company_codes']]
+        df_sub = df_sub.iloc[id_keep,:]
+        df_sub['publication_date'].astype(int)
+        df_sub = df_sub.sort_values(by=['publication_date'], ascending=False)
+        df_sub = df_sub[:10]
         print('OUT', best_matches)
 
         article_list = []
