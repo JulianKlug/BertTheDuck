@@ -28,6 +28,9 @@ def get_recommendations():
 
         #  Saving Data
         best_matches = all_sorted_matches[:10]
+#        best_matches['publication_date'].astype(int)
+#        best_matches = best_matches.sort_values(by=['publication_date'], ascending=False)
+#        best_matches = best_matches[:10]
         print('OUT', best_matches)
 
         article_list = []
