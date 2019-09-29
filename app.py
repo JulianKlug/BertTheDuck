@@ -27,8 +27,9 @@ def get_recommendations():
 
         #  Saving Data
         best_matches = all_sorted_matches[:20]
-        best_matches.sort(key = lambda x: int(x['publication_date']), reverse = True)
-        best_matches = best_matches[:10]
+#        best_matches['publication_date'] = list(map(int, best_matches['publication_date']))
+#        best_matches.sort_values(by=['publication_date'], ascending=False)
+#        best_matches = best_matches[:10]
         print('OUT', best_matches)
 
         article_list = []

@@ -7,7 +7,7 @@ def preprocess_input(input_file):
     with open(input_file) as fin:
         dat = json.load(fin)
 
-    number_of_input_articles = 128
+    number_of_input_articles = 5#128
     entries = []
     for i in dat['hits']['hits']:
         src = i['_source']
@@ -76,9 +76,13 @@ def translate_company_codes(dataframe):
                 if i.isalnum():
                     try: string[counter] = company_code_map[i.upper()]
                     except: break
+            print(string)
+            
             count = []
             for i in string:
+
                 count.append(sorted_by_match['desc'][0].lower().count(i.split()[0].lower()))
+            break
             max_ind = np.where(count == np.amax(count))
             sorted_by_match['Companies'][news_counter] = string[max_ind[0][0]]
 
